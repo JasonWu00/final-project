@@ -1,50 +1,64 @@
 # Proposal for the final project
 
+Note: This proposal is likely not going to resemble the final
+product and significant changes may occur.
+
 **People in the group**: Jason Wu, Julian Wong
 
 **Project description**:
 
-The project that we will be building is an RPG game.
-We have not yet decided on the plot for the RPG game, if any,
-but it is expected to have a system of battles against enemies,
-levels (and associated perks), upgrades for in-game currency,
-and more features.
+The project that we will be building is a simple version of the
+Battleship game. The current plan calls for a Player vs Computer
+mode and a Player vs Player mode. We are expecting to use the SDL
+library for this project.
 
 **User Interface**:
 
-The user interface would be centered around the command line.
-The program will print out relevant information regard the current
-game state, then prompt the user to make a choice. This may be
-subject to change as the project develops.
+The user interface would utilize SDL to create a new window, upon
+which the Battleship gameplay will occur. In either gamemode, both
+players start by placing down their "ships" in the window. Then,
+there will be a series of turns where each player clicks on a section
+of the screen designated for "the enemy's board" to try to hit enemy
+ships. The game ends when one player has all their ships hit or
+presses a surrender button (which will be included in a corner of
+the screen).
 
 **Technical Design**:
 
-Everything below this is not 100% certain and might change.
+The state of the game at any moment will be saved in either a file
+or a chunk of shared memory (in the case of a Player vs AI game), so
+that the user may return to the game later. (Shared Mem or Files)
 
-The game will require the use of fork() to create child instances.
-These child instances will carry out parts of the game, such as the
-combat encounters between the player and randomly generated enemies
-or the "shop" to purchase in-game upgrades in between encounters.
-(PROCESSES)
+Said file or shared mem could be passed between two computers engaged
+in a Player vs Player game as a method of transmitting moves. Since we
+are not yet familiarized with networking, this part may be subject to
+significant change. (Networking(?))
 
-The user will be able to "save" their characters as well as their
-progression in the game so that they can revisit the game at a later
-time. The current plan includes a method to save into either a text
-file or directly into system memory. The former allows for saves to
-be ported from device to device, the latter reduces the need to
-hassle with files that may be misplaced. (WORKING WITH FILES)
+In the event that a game is in progress, a semaphore can be implemented
+to ensure that only 1 player is interacting with the current state
+of the game. (Semaphore)
 
-The different "modes" for the game would include a quick match mode
-(where the player verses off against a bot enemy), story mode (the
-main gamemode), and a 1v1 mode (where two different players face off
-against each other in a turn based combat). The 1v1 mode would make
-use of semaphores and either a section of shared memory or a file,
-so that only one player can "move", or update the game state by
-making edits to the memory / file. (SEMAPHORE)
+To allow for multiple sessions of Battleship to be played without
+re-running the executable file, a child instance may be required per
+Battleship game. Once a game ends, the child ends and the game returns
+to the "main menu", or the parent, and awaits the players to either
+start another game or exit the game. (Processes)
 
-Timeline:
+**Responsibilities**:
 
-* January 2nd: Proposals due
-* (approx) January 3rd: approval of proposal and/or additional notes
-* (insert events here)
-* January 17th: Project due
+The project would likely consist of the following features: menu,
+networking between machines (for PvP) (not final), formatting of
+the game screen (for either game mode), "bot" actions (for PvBot),
+and basic SDL. I am expecting to handle networking and formatting,
+while Julian would be handling the menu and basic SDL. The coding
+of the "bot" actions may be split between us two.
+
+**Timeline**:
+
+* January 2nd: Proposals due.
+* (approx) January 3rd: approval of proposal and/or additional notes.
+* By January 6th: Understand the parts of SDL needed, set up menu, acquire sprites.
+* By January 9th: Get started on PvP (+ forks and possibly networking).
+* By January 13th: Get started on PvBot. Should take a bit less time.
+* By January 15th: finish both game modes, polish game, add quality of life features.
+* January 17th: Project due.
