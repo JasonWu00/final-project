@@ -34,9 +34,11 @@ in a Player vs Player game as a method of transmitting moves. Since we
 are not yet familiarized with networking, this part may be subject to
 significant change. (Networking(?))
 
-In the event that a game is in progress, a semaphore can be implemented
-to ensure that only 1 player is interacting with the current state
-of the game. (Semaphore)
+In the event that a Player vs AI game is in progress, a semaphore can
+be implemented to ensure that only 1 player is interacting with the
+current state of the game. It would be unfortunate if both the "bot" 
+and the player tried to move at the same time and messed up the game.
+(Semaphore)
 
 To allow for multiple sessions of Battleship to be played without
 re-running the executable file, a child instance may be required per
@@ -58,7 +60,8 @@ of the "bot" actions may be split between us two.
 * January 2nd: Proposals due.
 * (approx) January 3rd: approval of proposal and/or additional notes.
 * By January 6th: Understand the parts of SDL needed, set up menu, acquire sprites.
-* By January 9th: Get started on PvP (+ forks and possibly networking).
-* By January 13th: Get started on PvBot. Should take a bit less time.
+* By January 8th: Get started on PvP (+ forks and possibly networking).
+* (Expecting a lot of time for PvP mode, since networking is involved).
+* By January 13th: Get started on PvBot mode. Should take a bit less time.
 * By January 15th: finish both game modes, polish game, add quality of life features.
 * January 17th: Project due.
