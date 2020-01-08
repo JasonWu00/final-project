@@ -7,8 +7,10 @@ Jason Wu, Julian Wong (period 4)
 
 # Libraries:
 SDL2:
-enter `sudo apt-get install libsdl2-2.0` into the command line.
+enter `sudo apt-get install libsdl2-2.0` and `sudo apt-get install libsdl2-dev`
+into the command line.
 The SDL2 library should be installed for the computer once this is done.
+This procedure can take a bit of time.
 
 # Instructions to use the project:
 
