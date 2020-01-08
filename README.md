@@ -1,4 +1,18 @@
-# Proposal for the final project
+# Project Name:
+
+# Members:
+Jason Wu, Julian Wong (period 4)
+
+# Broad description:
+
+# Libraries:
+SDL2:
+enter `sudo apt-get install libsdl2-2.0` into the command line.
+The SDL2 library should be installed for the computer once this is done.
+
+# Instructions to use the project:
+
+# Proposal for the final project (APPROVED)
 
 **People in the group**: Jason Wu, Julian Wong
 
