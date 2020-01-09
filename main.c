@@ -23,8 +23,8 @@ int main() {
 
   printf("Window created successfully\n");
 
-  Uint32 render_flags = SDL_RENDER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
-  SDL_Renderer* render = SDL_CreateRender(window, -1, render_flags);
+  Uint32 render_flags = SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
+  SDL_Renderer* render = SDL_CreateRenderer(window, -1, render_flags);
   if (render == NULL) {
     printf("Error rendering: %s\n", SDL_GetError());
     SDL_Quit();
