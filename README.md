@@ -1,9 +1,10 @@
-# Project Name:
+# POINT AND CLICK BATTLESHIP
 
 # Members:
 Jason Wu, Julian Wong (period 4)
 
 # Broad description:
+Two-player point-and-click battleship using the SDL library
 
 # Libraries:
 SDL2:
