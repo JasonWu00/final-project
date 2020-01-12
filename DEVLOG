@@ -6,7 +6,11 @@ DEVLOG
 with new one. Note by Jason Wu.
 
 10:06pm January 8 2020
-* SDL's video driver bug fixed. Note to self: export SDL_VIDEODRIVER=dummy.
+* SDL's video driver bug (EDIT: NOT) fixed. Note to self: export SDL_VIDEODRIVER=dummy.
 * Initial testing conducted after bug fixed. SDL initiates successfully.
 * More coding to come.
+* Added by Jason Wu.
+
+9:35pm January 11 2020
+* WSL has an innate video driver issue. Switched to MSYS2 64 bit. Code works.
 * Added by Jason Wu.
