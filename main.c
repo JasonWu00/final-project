@@ -4,6 +4,9 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
 
+#define WINDOW_WIDTH (640)
+#define WINDOW_HEIGHT (480)
+
 int main(int argc, char *argv[]) {
   int sdl_startup_error = SDL_Init(SDL_INIT_VIDEO);
   if (sdl_startup_error != 0) {
@@ -25,7 +28,7 @@ int main(int argc, char *argv[]) {
   SDL_Window *window = SDL_CreateWindow("Battleship",
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
-                                        680, 480,
+                                        640, 480,
                                         SDL_WINDOW_SHOWN |
                                         //SDL_WINDOW_FULLSCREEN
                                         SDL_WINDOW_RESIZABLE
@@ -73,7 +76,7 @@ int main(int argc, char *argv[]) {
   printf("Surface made\n");
 
   SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
-  SDL_FreeSurface(surface);
+  //SDL_FreeSurface(surface);
   if (texture == NULL) {
     printf("Error making texture: %s\n", SDL_GetError());
     SDL_DestroyRenderer(render);
@@ -83,11 +86,25 @@ int main(int argc, char *argv[]) {
   }
   printf("Texture made\n");
 
-  SDL_RenderClear(render);
-  SDL_RenderCopy(render, texture, NULL, NULL);
-  SDL_RenderPresent(render);
+  //SDL_Delay(5000);
 
-  SDL_Delay(5000);
+  SDL_Rect dest;
+  dest.w = WINDOW_WIDTH;
+  dest.h = WINDOW_HEIGHT;
+  SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+
+  while (1) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        exit(0);
+      }
+    }
+    SDL_RenderClear(render);
+    SDL_RenderCopy(render, texture, NULL, NULL);
+    SDL_RenderPresent(render);
+    SDL_Delay(1000/60);
+  }
 
   SDL_DestroyTexture(texture);
   SDL_DestroyRenderer(render);

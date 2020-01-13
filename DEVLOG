@@ -14,3 +14,7 @@ with new one. Note by Jason Wu.
 9:35pm January 11 2020
 * WSL has an innate video driver issue. Switched to MSYS2 64 bit. Code works.
 * Added by Jason Wu.
+
+9:48pm January 11 2020
+* Displaying static image on resizable, minimizable, and closeable window.
+* Added by Jason Wu.

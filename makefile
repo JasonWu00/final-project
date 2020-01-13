@@ -5,7 +5,6 @@ main.o: main.c
 	gcc -c main.c
 
 run:
-	export SDL_VIDEODRIVER=dummy
 	./game
 
 clean:
