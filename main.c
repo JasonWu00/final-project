@@ -128,7 +128,11 @@ int main(int argc, char *argv[]) {
       if (event.type == SDL_QUIT) {
         exit(0);
       }
+      if (event.type = SDL_MOUSEBUTTONDOWN) {
+        exit(0);
+      }
     }
+
     SDL_RenderClear(render);
     SDL_RenderCopy(render, texture, NULL, NULL);
     SDL_RenderCopy(render, pvp_button_texture, NULL, &pvp);
