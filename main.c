@@ -124,21 +124,39 @@ int main(int argc, char *argv[]) {
 
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      switch(event.type){
-        case SDL_QUIT:
+    while (SDL_PollEvent(&event)) { //check for events
+      switch(event.type){ 
+        case SDL_QUIT: //click X on opper right
           exit(0);
           break;
         case SDL_MOUSEBUTTONDOWN:
-          if (
-              event.button.x >= WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25 &&
-              event.button.y >= 325 &&
-              event.button.x <= (WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25) + BUTTON_WIDTH &&
-              event.button.y <= 325 + BUTTON_HEIGHT
+          if ( //click on quit game button
+              event.button.x >= quit.x &&
+              event.button.y >= quit.y &&
+              event.button.x <= quit.x + BUTTON_WIDTH &&
+              event.button.y <= quit.y + BUTTON_HEIGHT
               )
               {
-            exit(0);
-          }
+                exit(0);
+              }
+          if ( //click on pvp button
+              event.button.x >= pvp.x &&
+              event.button.y >= pvp.y &&
+              event.button.x <= pvp.x + BUTTON_WIDTH &&
+              event.button.y <= pvp.y + BUTTON_HEIGHT
+              )
+              {
+                exit(0); //temporary action, will be updated later
+              }
+          if ( //click on pvp button
+              event.button.x >= pve.x &&
+              event.button.y >= pve.y &&
+              event.button.x <= pve.x + BUTTON_WIDTH &&
+              event.button.y <= pve.y + BUTTON_HEIGHT
+              )
+              {
+                exit(0); //temporary action, will be updated later
+              }
           break;
       }
     }
