@@ -125,11 +125,21 @@ int main(int argc, char *argv[]) {
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
-        exit(0);
-      }
-      if (event.type = SDL_MOUSEBUTTONDOWN) {
-        exit(0);
+      switch(event.type){
+        case SDL_QUIT:
+          exit(0);
+          break;
+        case SDL_MOUSEBUTTONDOWN:
+          if (
+              event.button.x >= WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25 &&
+              event.button.y >= 325 &&
+              event.button.x <= (WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25) + BUTTON_WIDTH &&
+              event.button.y <= 325 + BUTTON_HEIGHT
+              )
+              {
+            exit(0);
+          }
+          break;
       }
     }
 
