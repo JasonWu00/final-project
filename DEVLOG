@@ -39,12 +39,15 @@ with new one.
 * Windows w/ MinGW 64 bit does not support fork(). Cygwin (possibly) needed.
 * Added by Jason Wu.
 
+~10:00am Janyuary 16 2020
+* Networking code added by Julian Wong.
+
 11:02am January 16 2020
 * NOTE TO SELF
 * computer address for Jason Wu assigned computer: 149.89.150.109
 
-4:04pm January 16 2020
+4:30pm January 16 2020
 * Added "testing.c" with h file, originally to test small bits of code.
-* Repurposing of testing.c possible.
+* testing.c repurposed to hold code and reduce main.c clutter.
 * Fixed bug with clicking right half of buttons.
 * Added by Jason Wu.
