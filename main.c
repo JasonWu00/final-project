@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "networking.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
