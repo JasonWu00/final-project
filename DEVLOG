@@ -38,3 +38,7 @@ with new one.
 * Work to create a new window upon pressing one of the two gamemode buttons started.
 * Windows w/ MinGW 64 bit does not support fork(). Cygwin (possibly) needed.
 * Added by Jason Wu.
+
+11:02am January 16 2020
+* FINISH LATER
+* computer address for Jason Wu assigned computer: 149.89.150.109
