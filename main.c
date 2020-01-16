@@ -31,10 +31,6 @@ int main(int argc, char *argv[]) {
 
   IMG_Init(IMG_INIT_PNG);//initiates sdl_image
   printf("SDL initiated successfully\n");
-  //SDL_Window *window;
-  //SDL_Surface *window_surface;
-  //SDL_Renderer *render;
-  //makeMainMenu(window, window_surface, render);
   
   SDL_Window *window = SDL_CreateWindow("Battleship Menu",//make window
                                         SDL_WINDOWPOS_CENTERED,
