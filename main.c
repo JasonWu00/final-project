@@ -12,6 +12,7 @@
 #define BUTTON_HEIGHT (40)
 
 int main(int argc, char *argv[]) {
+
   int yourPID = getpid();
   int sdl_startup_error = SDL_Init(SDL_INIT_VIDEO);
   if (sdl_startup_error != 0) {//initiates SDL
@@ -141,9 +142,9 @@ int main(int argc, char *argv[]) {
               )
               {
                 //exit(0);
-                fork();
-                int childPID = getpid();
-                if (childPID != yourPID) {
+                //fork();
+                //int childPID = getpid();
+                //if (childPID != yourPID) {
                   SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                                       SDL_WINDOWPOS_CENTERED,
                                                       SDL_WINDOWPOS_CENTERED,
@@ -184,7 +185,7 @@ int main(int argc, char *argv[]) {
                     SDL_RenderPresent(game_render);
                     SDL_Delay(1000/60);
                   }
-                }
+                //}
               }
           if ( //click on pvp button
               event.button.x >= pvp.x &&
@@ -195,7 +196,7 @@ int main(int argc, char *argv[]) {
               {
                 exit(0); //temporary action, will be updated later
               }
-          if ( //click on pvw button
+          if ( //click on pve button
               event.button.x >= pve.x &&
               event.button.y >= pve.y &&
               event.button.x <= pve.x + BUTTON_WIDTH &&

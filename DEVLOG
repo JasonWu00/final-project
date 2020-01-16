@@ -1,12 +1,13 @@
 DEVLOG
 
 12:10am January 8 2020
-* Devlog file and README formatting started. Added by Jason Wu.
+* Devlog file and README formatting started.
 * Actual coding not started due to replacement of current computer
-with new one. Note by Jason Wu.
+with new one.
+* Added by Jason Wu.
 
 10:06pm January 8 2020
-* SDL's video driver bug (EDIT: NOT) fixed. Note to self: export SDL_VIDEODRIVER=dummy.
+* SDL's video driver bug (EDIT: NOT) fixed.
 * Initial testing conducted after bug (EDIT: NOT) fixed. SDL initiates successfully.
 * More coding to come.
 * Added by Jason Wu.
@@ -25,6 +26,7 @@ with new one. Note by Jason Wu.
 
 ~11pm January 14 2020
 * Clicking the "Quit game" button exits the program.
+* New computer died to unrelated issues. A small amount of work lost.
 * Added by Jason Wu.
 
 11:00am January 15 2020

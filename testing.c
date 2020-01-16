@@ -11,7 +11,7 @@
 #define BUTTON_WIDTH (175)
 #define BUTTON_HEIGHT (40)
 
-int main(int argc, char* argv[]) {
+int makeGameWindow() {
 
   SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                               SDL_WINDOWPOS_CENTERED,
@@ -53,4 +53,8 @@ int main(int argc, char* argv[]) {
     SDL_RenderPresent(game_render);
     SDL_Delay(1000/60);
   }
+}
+
+int main(int argc, char* argv[]) {
+  makeGameWindow();
 }
