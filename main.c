@@ -31,7 +31,11 @@ int main(int argc, char *argv[]) {
 
   IMG_Init(IMG_INIT_PNG);//initiates sdl_image
   printf("SDL initiated successfully\n");
-
+  //SDL_Window *window;
+  //SDL_Surface *window_surface;
+  //SDL_Renderer *render;
+  //makeMainMenu(window, window_surface, render);
+  
   SDL_Window *window = SDL_CreateWindow("Battleship Menu",//make window
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
@@ -74,7 +78,7 @@ int main(int argc, char *argv[]) {
 
   SDL_Surface* surface = IMG_Load("sprites/main-menu.png");
   if (surface == NULL) {
-    //printf("Error making surface: %s\n", SDL_GetError());
+    printf("Error making surface: %s\n", SDL_GetError());
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -131,19 +135,19 @@ int main(int argc, char *argv[]) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { //check for events
       switch(event.type){
-        case SDL_QUIT: //click X on opper right
+        case SDL_QUIT: //click X on upper right
           exit(0);
           break;
         case SDL_MOUSEBUTTONDOWN:
           if ( //click on quit game button
               event.button.x >= quit.x &&
               event.button.y >= quit.y &&
-              event.button.x <= quit.x + BUTTON_WIDTH &&
+              event.button.x <= quit.x + BUTTON_WIDTH * 1.5 &&
               event.button.y <= quit.y + BUTTON_HEIGHT
               )
               {
-                //exit(0);
-                makeGameWindow();
+                exit(0);
+                //makeGameWindow();
                 //fork();
                 //int childPID = getpid();
                 //if (childPID != yourPID) {
