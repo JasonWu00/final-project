@@ -31,3 +31,8 @@ with new one. Note by Jason Wu.
 * Clicking for all 3 buttons added. For now they all exit the program.
 * Wil add in gamemode later.
 * Added by Jason Wu.
+
+10:00pm January 15 2020
+* Work to create a new window upon pressing one of the two gamemode buttons started.
+* Windows w/ MinGW 64 bit does not support fork(). Cygwin (possibly) needed.
+* Added by Jason Wu.
