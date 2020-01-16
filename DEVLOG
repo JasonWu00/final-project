@@ -40,5 +40,11 @@ with new one.
 * Added by Jason Wu.
 
 11:02am January 16 2020
-* FINISH LATER
+* NOTE TO SELF
 * computer address for Jason Wu assigned computer: 149.89.150.109
+
+4:04pm January 16 2020
+* Added "testing.c" with h file, originally to test small bits of code.
+* Repurposing of testing.c possible.
+* Fixed bug with clicking right half of buttons.
+* Added by Jason Wu.
