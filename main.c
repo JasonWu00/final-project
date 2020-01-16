@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "testing.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
@@ -61,7 +62,7 @@ int main(int argc, char *argv[]) {
 
     //SDL_Delay(5000);
 
-  SDL_Renderer* render = SDL_CreateRenderer(window, -1, 0);
+  SDL_Renderer* render = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
   if (render == NULL) {
     printf("Error rendering: %s\n", SDL_GetError());
     SDL_DestroyRenderer(render);
@@ -142,10 +143,11 @@ int main(int argc, char *argv[]) {
               )
               {
                 //exit(0);
+                makeGameWindow();
                 //fork();
                 //int childPID = getpid();
                 //if (childPID != yourPID) {
-                  SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
+                  /*SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                                       SDL_WINDOWPOS_CENTERED,
                                                       SDL_WINDOWPOS_CENTERED,
                                                       640, 480,
@@ -185,12 +187,12 @@ int main(int argc, char *argv[]) {
                     SDL_RenderPresent(game_render);
                     SDL_Delay(1000/60);
                   }
-                //}
+                //}*/
               }
           if ( //click on pvp button
               event.button.x >= pvp.x &&
               event.button.y >= pvp.y &&
-              event.button.x <= pvp.x + BUTTON_WIDTH &&
+              event.button.x <= pvp.x + BUTTON_WIDTH * 1.5 &&
               event.button.y <= pvp.y + BUTTON_HEIGHT
               )
               {
@@ -199,7 +201,7 @@ int main(int argc, char *argv[]) {
           if ( //click on pve button
               event.button.x >= pve.x &&
               event.button.y >= pve.y &&
-              event.button.x <= pve.x + BUTTON_WIDTH &&
+              event.button.x <= pve.x + BUTTON_WIDTH  * 1.5 &&
               event.button.y <= pve.y + BUTTON_HEIGHT
               )
               {

@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "testing.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
@@ -22,7 +23,7 @@ int makeGameWindow() {
                                               SDL_WINDOW_RESIZABLE
                                               //SDL_WINDOW_MINIMIZED
                                               );
-  SDL_Renderer *game_render = SDL_CreateRenderer(game_window, -1, 0);
+  SDL_Renderer *game_render = SDL_CreateRenderer(game_window, -1, SDL_RENDERER_PRESENTVSYNC);
   SDL_Surface *game_sf = SDL_GetWindowSurface(game_window);
   SDL_UpdateWindowSurface(game_window);
   SDL_Surface *game_surface = IMG_Load("sprites/battleship-grid.png");
@@ -55,6 +56,3 @@ int makeGameWindow() {
   }
 }
 
-int main(int argc, char* argv[]) {
-  makeGameWindow();
-}
