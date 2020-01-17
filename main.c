@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include "networking.h"
+#include "testing.h"
 
 #define WINDOW_WIDTH (640)
 #define WINDOW_HEIGHT (480)
@@ -13,6 +14,7 @@
 #define BUTTON_HEIGHT (40)
 
 int main(int argc, char *argv[]) {
+
   int yourPID = getpid();
   int sdl_startup_error = SDL_Init(SDL_INIT_VIDEO);
   if (sdl_startup_error != 0) {//initiates SDL
@@ -61,7 +63,7 @@ int main(int argc, char *argv[]) {
 
     //SDL_Delay(5000);
 
-  SDL_Renderer* render = SDL_CreateRenderer(window, -1, 0);
+  SDL_Renderer* render = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
   if (render == NULL) {
     printf("Error rendering: %s\n", SDL_GetError());
     SDL_DestroyRenderer(render);
@@ -73,7 +75,7 @@ int main(int argc, char *argv[]) {
 
   SDL_Surface* surface = IMG_Load("sprites/main-menu.png");
   if (surface == NULL) {
-    //printf("Error making surface: %s\n", SDL_GetError());
+    printf("Error making surface: %s\n", SDL_GetError());
     SDL_DestroyRenderer(render);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -130,22 +132,23 @@ int main(int argc, char *argv[]) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) { //check for events
       switch(event.type){
-        case SDL_QUIT: //click X on opper right
+        case SDL_QUIT: //click X on upper right
           exit(0);
           break;
         case SDL_MOUSEBUTTONDOWN:
           if ( //click on quit game button
               event.button.x >= quit.x &&
               event.button.y >= quit.y &&
-              event.button.x <= quit.x + BUTTON_WIDTH &&
+              event.button.x <= quit.x + BUTTON_WIDTH * 1.5 &&
               event.button.y <= quit.y + BUTTON_HEIGHT
               )
               {
-                //exit(0);
-                fork();
-                int childPID = getpid();
-                if (childPID != yourPID) {
-                  SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
+                exit(0);
+                //makeGameWindow();
+                //fork();
+                //int childPID = getpid();
+                //if (childPID != yourPID) {
+                  /*SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                                       SDL_WINDOWPOS_CENTERED,
                                                       SDL_WINDOWPOS_CENTERED,
                                                       640, 480,
@@ -170,7 +173,7 @@ int main(int argc, char *argv[]) {
                   int client1 = client1setup();
                   int client2 = client2setup();
 
-                  
+
 
                   while (1) {
                     SDL_Event game_event;
@@ -191,21 +194,21 @@ int main(int argc, char *argv[]) {
                     SDL_RenderPresent(game_render);
                     SDL_Delay(1000/60);
                   }
-                }
+                //}*/
               }
           if ( //click on pvp button
               event.button.x >= pvp.x &&
               event.button.y >= pvp.y &&
-              event.button.x <= pvp.x + BUTTON_WIDTH &&
+              event.button.x <= pvp.x + BUTTON_WIDTH * 1.5 &&
               event.button.y <= pvp.y + BUTTON_HEIGHT
               )
               {
                 exit(0); //temporary action, will be updated later
               }
-          if ( //click on pvw button
+          if ( //click on pve button
               event.button.x >= pve.x &&
               event.button.y >= pve.y &&
-              event.button.x <= pve.x + BUTTON_WIDTH &&
+              event.button.x <= pve.x + BUTTON_WIDTH  * 1.5 &&
               event.button.y <= pve.y + BUTTON_HEIGHT
               )
               {
