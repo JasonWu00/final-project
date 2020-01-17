@@ -166,6 +166,12 @@ int main(int argc, char *argv[]) {
 
                   SDL_QueryTexture(game_texture, NULL, NULL, &gamedest.w, &gamedest.h);
 
+                  //server setup stuff from networking.c
+                  int client1 = client1setup();
+                  int client2 = client2setup();
+
+                  
+
                   while (1) {
                     SDL_Event game_event;
                     while (SDL_PollEvent(&game_event)) {
@@ -217,6 +223,7 @@ int main(int argc, char *argv[]) {
     SDL_RenderPresent(render);
     SDL_Delay(1000/60);
   }
+
 
   SDL_DestroyTexture(texture);
   SDL_DestroyRenderer(render);
