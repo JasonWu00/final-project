@@ -5,6 +5,7 @@
 #include <SDL2/SDL_image.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "networking.h"
 #include "testing.h"
 
 #define WINDOW_WIDTH (640)
@@ -31,7 +32,7 @@ int main(int argc, char *argv[]) {
 
   IMG_Init(IMG_INIT_PNG);//initiates sdl_image
   printf("SDL initiated successfully\n");
-  
+
   SDL_Window *window = SDL_CreateWindow("Battleship Menu",//make window
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
@@ -168,6 +169,12 @@ int main(int argc, char *argv[]) {
 
                   SDL_QueryTexture(game_texture, NULL, NULL, &gamedest.w, &gamedest.h);
 
+                  //server setup stuff from networking.c
+                  int client1 = client1setup();
+                  int client2 = client2setup();
+
+
+
                   while (1) {
                     SDL_Event game_event;
                     while (SDL_PollEvent(&game_event)) {
@@ -219,6 +226,7 @@ int main(int argc, char *argv[]) {
     SDL_RenderPresent(render);
     SDL_Delay(1000/60);
   }
+
 
   SDL_DestroyTexture(texture);
   SDL_DestroyRenderer(render);
