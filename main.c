@@ -1,10 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include "networking.h"
 #include "testing.h"
 
@@ -127,6 +123,10 @@ int main(int argc, char *argv[]) {
   SDL_QueryTexture(pvp_button_texture, NULL, NULL, &pvp.w, &pvp.h);
   SDL_QueryTexture(pve_button_texture, NULL, NULL, &pve.w, &pve.h);
   SDL_QueryTexture(quitgame_button_texture, NULL, NULL, &quit.w, &quit.h);
+
+  //setting up server and client
+  int c1d = client1setup();//c1d is fildes for client 1 ("server side")
+  int c2d = client2setup();//c2d is fildes for client 2 ("client side")
 
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
