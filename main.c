@@ -33,9 +33,18 @@ int main(int argc, char *argv[]) {
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
                                         640, 480,
-                                        SDL_WINDOW_SHOWN |
+                                        SDL_WINDOW_SHOWN //|
                                         //SDL_WINDOW_FULLSCREEN
-                                        SDL_WINDOW_RESIZABLE
+                                        //SDL_WINDOW_RESIZABLE
+                                        //SDL_WINDOW_MINIMIZED
+                                      );
+  SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
+                                        SDL_WINDOWPOS_CENTERED,
+                                        SDL_WINDOWPOS_CENTERED,
+                                        777, 946,
+                                        SDL_WINDOW_HIDDEN //|
+                                        //SDL_WINDOW_FULLSCREEN
+                                        //SDL_WINDOW_RESIZABLE
                                         //SDL_WINDOW_MINIMIZED
                                       );
   if (window == NULL) {
@@ -48,16 +57,16 @@ int main(int argc, char *argv[]) {
   printf("Window created successfully\n");
 
   SDL_Surface *window_surface = SDL_GetWindowSurface(window);
+  SDL_Surface *game_window_surface = SDL_GetWindowSurface(game_window);
 
-    if(!window_surface)
-    {
-        printf("Failed to get the surface from the window\n");
-        return -1;
-    }
+  if(!window_surface) {
+    printf("Failed to get the surface from the window\n");
+    return -1;
+  }
 
-    SDL_UpdateWindowSurface(window);
+  SDL_UpdateWindowSurface(window);
 
-    //SDL_Delay(5000);
+  //SDL_Delay(5000);
 
   SDL_Renderer* render = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
   if (render == NULL) {
@@ -68,6 +77,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   printf("Render successful\n");
+  SDL_Renderer* game_render = SDL_CreateRenderer(game_window, -1, SDL_RENDERER_PRESENTVSYNC);
 
   SDL_Surface* surface = IMG_Load("sprites/main-menu.png");
   if (surface == NULL) {
@@ -78,6 +88,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   printf("Surface made\n");
+  SDL_Surface* game_surface = IMG_Load("sprites/battleship-grid.png");
 
   SDL_Texture* texture = SDL_CreateTextureFromSurface(render, surface);
   //SDL_FreeSurface(surface);
@@ -88,6 +99,7 @@ int main(int argc, char *argv[]) {
     SDL_Quit();
     return 1;
   }
+  SDL_Texture* game_texture = SDL_CreateTextureFromSurface(game_render, game_surface);
 
   SDL_Surface* pvp_button_surface = IMG_Load("sprites/pvp.png");
   SDL_Surface* pve_button_surface = IMG_Load("sprites/pvb.png");
@@ -100,17 +112,20 @@ int main(int argc, char *argv[]) {
   printf("Texture made\n");
 
   //SDL_Delay(5000);
+  SDL_Rect game;
+  game.w = 777;
+  game.h = 946;
 
   SDL_Rect dest;
   dest.w = WINDOW_WIDTH;
   dest.h = WINDOW_HEIGHT;
   SDL_Rect pvp;
-  pvp.x = WINDOW_WIDTH / 2 - 2 *BUTTON_WIDTH / 3 - 25;
+  pvp.x = WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25;
   pvp.y = 175;
   pvp.w = BUTTON_WIDTH;
   pvp.h = BUTTON_HEIGHT;
   SDL_Rect pve;
-  pve.x = WINDOW_WIDTH / 2 - 2 *BUTTON_WIDTH / 3 - 25;
+  pve.x = WINDOW_WIDTH / 2 - 2 * BUTTON_WIDTH / 3 - 25;
   pve.y = 250;
   pve.w = BUTTON_WIDTH;
   pve.h = BUTTON_HEIGHT;
@@ -125,8 +140,8 @@ int main(int argc, char *argv[]) {
   SDL_QueryTexture(quitgame_button_texture, NULL, NULL, &quit.w, &quit.h);
 
   //setting up server and client
-  int c1d = client1setup();//c1d is fildes for client 1 ("server side")
-  int c2d = client2setup();//c2d is fildes for client 2 ("client side")
+  //int c1d = client1setup();//c1d is fildes for client 1 ("server side")
+  //int c2d = client2setup();//c2d is fildes for client 2 ("client side")
 
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
