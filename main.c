@@ -1,7 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_image.h>
-#include "networking.h"
+//#include "networking.h"
 #include "testing.h"
 
 #define WINDOW_WIDTH (640)
@@ -11,7 +11,7 @@
 
 int main(int argc, char *argv[]) {
 
-  int yourPID = getpid();
+  //int yourPID = getpid();
   int sdl_startup_error = SDL_Init(SDL_INIT_VIDEO);
   if (sdl_startup_error != 0) {//initiates SDL
     printf("Error initiating SDL: %s\n", SDL_GetError());
@@ -39,20 +39,22 @@ int main(int argc, char *argv[]) {
                                         //SDL_WINDOW_MINIMIZED
                                       );
   SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
-                                        SDL_WINDOWPOS_CENTERED,
-                                        SDL_WINDOWPOS_CENTERED,
-                                        777, 946,
-                                        SDL_WINDOW_HIDDEN //|
-                                        //SDL_WINDOW_FULLSCREEN
-                                        //SDL_WINDOW_RESIZABLE
-                                        //SDL_WINDOW_MINIMIZED
-                                      );
+                                             SDL_WINDOWPOS_CENTERED,
+                                             SDL_WINDOWPOS_CENTERED,
+                                             777, 946,
+                                             SDL_WINDOW_HIDDEN //|
+                                             //SDL_WINDOW_FULLSCREEN
+                                             //SDL_WINDOW_RESIZABLE
+                                             //SDL_WINDOW_MINIMIZED
+                                           );
   if (window == NULL) {
     printf("Error creating window: %s\n", SDL_GetError());
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 1;
   }
+  int menu_id = SDL_GetWindowID(window);
+  int gameplay_id = SDL_GetWindowID(game_window);
 
   printf("Window created successfully\n");
 
@@ -115,7 +117,7 @@ int main(int argc, char *argv[]) {
   SDL_Rect game;
   game.w = 777;
   game.h = 946;
-
+  SDL_QueryTexture(game_texture, NULL, NULL, &game.w, &game.h);
   SDL_Rect dest;
   dest.w = WINDOW_WIDTH;
   dest.h = WINDOW_HEIGHT;
@@ -146,9 +148,17 @@ int main(int argc, char *argv[]) {
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
     while (SDL_PollEvent(&event)) { //check for events
+      if (event.type == SDL_QUIT) {
+        exit(0);
+      }
       switch(event.type){
-        case SDL_QUIT: //click X on upper right
-          exit(0);
+        case SDL_WINDOWEVENT: //click X on upper right
+          if (event.window.windowID == menu_id && event.window.event == SDL_WINDOWEVENT_CLOSE) {
+            exit(0);
+          }
+          if (event.window.windowID == gameplay_id && event.window.event == SDL_WINDOWEVENT_CLOSE) {
+            SDL_HideWindow(game_window);
+          }
           break;
         case SDL_MOUSEBUTTONDOWN:
           if ( //click on quit game button
@@ -158,7 +168,11 @@ int main(int argc, char *argv[]) {
               event.button.y <= quit.y + BUTTON_HEIGHT
               )
               {
-                exit(0);
+                if (event.window.windowID == menu_id) {
+                  SDL_HideWindow(window);
+                  SDL_ShowWindow(game_window);
+                }
+                //exit(0);
                 //makeGameWindow();
                 //fork();
                 //int childPID = getpid();
