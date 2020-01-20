@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
   SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                              SDL_WINDOWPOS_CENTERED,
                                              SDL_WINDOWPOS_CENTERED,
-                                             777, 946,
+                                             544, 662,
                                              SDL_WINDOW_HIDDEN //|
                                              //SDL_WINDOW_FULLSCREEN
                                              //SDL_WINDOW_RESIZABLE
@@ -115,8 +115,8 @@ int main(int argc, char *argv[]) {
 
   //SDL_Delay(5000);
   SDL_Rect game;
-  game.w = 777;
-  game.h = 946;
+  game.w = 544;
+  game.h = 662;
   SDL_QueryTexture(game_texture, NULL, NULL, &game.w, &game.h);
   SDL_Rect dest;
   dest.w = WINDOW_WIDTH;
@@ -148,103 +148,65 @@ int main(int argc, char *argv[]) {
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
     while (SDL_PollEvent(&event)) { //check for events
-      if (event.type == SDL_QUIT) {
-        exit(0);
-      }
-      switch(event.type){
-        case SDL_WINDOWEVENT: //click X on upper right
-          if (event.window.windowID == menu_id && event.window.event == SDL_WINDOWEVENT_CLOSE) {
-            exit(0);
+        if (event.window.windowID == gameplay_id) {
+
+          switch(event.type) {
+
+            case SDL_WINDOWEVENT:
+              if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
+                exit(0);
+              }
+              break;
+            }
           }
-          if (event.window.windowID == gameplay_id && event.window.event == SDL_WINDOWEVENT_CLOSE) {
-            SDL_HideWindow(game_window);
-          }
-          break;
-        case SDL_MOUSEBUTTONDOWN:
-          if ( //click on quit game button
-              event.button.x >= quit.x &&
-              event.button.y >= quit.y &&
-              event.button.x <= quit.x + BUTTON_WIDTH * 1.5 &&
-              event.button.y <= quit.y + BUTTON_HEIGHT
-              )
-              {
-                if (event.window.windowID == menu_id) {
-                  SDL_HideWindow(window);
-                  SDL_ShowWindow(game_window);
-                }
-                //exit(0);
-                //makeGameWindow();
-                //fork();
-                //int childPID = getpid();
-                //if (childPID != yourPID) {
-                  /*SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
-                                                      SDL_WINDOWPOS_CENTERED,
-                                                      SDL_WINDOWPOS_CENTERED,
-                                                      640, 480,
-                                                      SDL_WINDOW_SHOWN |
-                                                      //SDL_WINDOW_FULLSCREEN
-                                                      SDL_WINDOW_RESIZABLE
-                                                      //SDL_WINDOW_MINIMIZED
-                                                    );
-                  SDL_Renderer *game_render = SDL_CreateRenderer(game_window, -1, 0);
-                  SDL_Surface *game_sf = SDL_GetWindowSurface(game_window);
-                  SDL_UpdateWindowSurface(game_window);
-                  SDL_Surface *game_surface = IMG_Load("sprites/battleship-grid.png");
-                  SDL_Texture *game_texture = SDL_CreateTextureFromSurface(game_render, game_surface);
 
-                  SDL_Rect gamedest;
-                  gamedest.w = WINDOW_WIDTH;
-                  gamedest.h = WINDOW_HEIGHT;
+        if (event.window.windowID == menu_id) { //occurs in menu window
 
-                  SDL_QueryTexture(game_texture, NULL, NULL, &gamedest.w, &gamedest.h);
+          switch(event.type) {
 
-                  //server setup stuff from networking.c
-                  int client1 = client1setup();
-                  int client2 = client2setup();
+            case SDL_WINDOWEVENT:
+              if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
+                exit(0);
+              }
+              break;
 
-
-
-                  while (1) {
-                    SDL_Event game_event;
-                    while (SDL_PollEvent(&game_event)) {
-
-                      switch (game_event.type) {
-                        case SDL_QUIT:
-                          SDL_DestroyTexture(game_texture);
-                          SDL_DestroyRenderer(game_render);
-                          SDL_DestroyWindow(game_window);
-                          exit(0);
-                          break;
-                      }
-                    }
-
-                    SDL_RenderClear(game_render);
-                    SDL_RenderCopy(game_render, game_texture, NULL, NULL);
-                    SDL_RenderPresent(game_render);
-                    SDL_Delay(1000/60);
+            case SDL_MOUSEBUTTONDOWN:
+              if ( //click on quit game button
+                event.button.x >= quit.x &&
+                event.button.y >= quit.y &&
+                event.button.x <= quit.x + BUTTON_WIDTH * 1.5 &&
+                event.button.y <= quit.y + BUTTON_HEIGHT
+                )
+                {
+                  if (event.window.windowID == menu_id) {
+                    SDL_HideWindow(window);
+                    SDL_ShowWindow(game_window);
                   }
-                //}*/
-              }
-          if ( //click on pvp button
-              event.button.x >= pvp.x &&
-              event.button.y >= pvp.y &&
-              event.button.x <= pvp.x + BUTTON_WIDTH * 1.5 &&
-              event.button.y <= pvp.y + BUTTON_HEIGHT
-              )
-              {
-                exit(0); //temporary action, will be updated later
-              }
-          if ( //click on pve button
-              event.button.x >= pve.x &&
-              event.button.y >= pve.y &&
-              event.button.x <= pve.x + BUTTON_WIDTH  * 1.5 &&
-              event.button.y <= pve.y + BUTTON_HEIGHT
-              )
-              {
-                exit(0); //temporary action, will be updated later
-              }
+                }
+
+              if ( //click on pvp button
+                event.button.x >= pvp.x &&
+                event.button.y >= pvp.y &&
+                event.button.x <= pvp.x + BUTTON_WIDTH * 1.5 &&
+                event.button.y <= pvp.y + BUTTON_HEIGHT
+                )
+                {
+                  exit(0); //temporary action, will be updated later
+                }
+
+              if ( //click on pve button
+                event.button.x >= pve.x &&
+                event.button.y >= pve.y &&
+                event.button.x <= pve.x + BUTTON_WIDTH  * 1.5 &&
+                event.button.y <= pve.y + BUTTON_HEIGHT
+                )
+                {
+                  exit(0); //temporary action, will be updated later
+                }
+                break;
+            }
+          }
           break;
-      }
     }
 
     SDL_RenderClear(render);
@@ -253,6 +215,11 @@ int main(int argc, char *argv[]) {
     SDL_RenderCopy(render, pve_button_texture, NULL, &pve);
     SDL_RenderCopy(render, quitgame_button_texture, NULL, &quit);
     SDL_RenderPresent(render);
+
+    SDL_RenderClear(game_render);
+    SDL_RenderCopy(game_render, game_texture, NULL, NULL);
+    SDL_RenderPresent(game_render);
+
     SDL_Delay(1000/60);
   }
 
