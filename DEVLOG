@@ -51,3 +51,7 @@ with new one.
 * testing.c repurposed to hold code and reduce main.c clutter.
 * Fixed bug with clicking right half of buttons.
 * Added by Jason Wu.
+
+6:00pm January 20 2020
+* Cleaned up SDL poll event cascade. New window opens. Need to fix image quality.
+* Added by Jason Wu.
