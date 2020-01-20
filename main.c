@@ -8,6 +8,8 @@
 #define WINDOW_HEIGHT (480)
 #define BUTTON_WIDTH (175)
 #define BUTTON_HEIGHT (40)
+#define GAME_WIDTH (544)
+#define GAME_HEIGHT (662)
 
 int main(int argc, char *argv[]) {
 
@@ -41,7 +43,7 @@ int main(int argc, char *argv[]) {
   SDL_Window *game_window = SDL_CreateWindow("Battleship Gameplay",//make window
                                              SDL_WINDOWPOS_CENTERED,
                                              SDL_WINDOWPOS_CENTERED,
-                                             544, 662,
+                                             GAME_WIDTH, GAME_HEIGHT,
                                              SDL_WINDOW_HIDDEN //|
                                              //SDL_WINDOW_FULLSCREEN
                                              //SDL_WINDOW_RESIZABLE
@@ -115,8 +117,8 @@ int main(int argc, char *argv[]) {
 
   //SDL_Delay(5000);
   SDL_Rect game;
-  game.w = 544;
-  game.h = 662;
+  game.w = GAME_WIDTH;
+  game.h = GAME_HEIGHT;
   SDL_QueryTexture(game_texture, NULL, NULL, &game.w, &game.h);
   SDL_Rect dest;
   dest.w = WINDOW_WIDTH;
