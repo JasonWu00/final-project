@@ -111,6 +111,7 @@ int main(int argc, char *argv[]) {
   SDL_Surface* surrender_surface = IMG_Load("sprites/surrender.png");
   SDL_Surface* defeated_surface = IMG_Load("sprites/defeated.png");
   SDL_Surface* aircraft_surface = IMG_Load("sprites/aircraft-placed.png");
+  SDL_Surface* battleship_surface = IMG_Load("sprites/battleship-placed.png");
 
   SDL_Texture* pvp_button_texture = SDL_CreateTextureFromSurface(render, pvp_button_surface);
   SDL_Texture* pve_button_texture = SDL_CreateTextureFromSurface(render, pve_button_surface);
@@ -118,6 +119,7 @@ int main(int argc, char *argv[]) {
   SDL_Texture* surrender_texture = SDL_CreateTextureFromSurface(game_render, surrender_surface);
   SDL_Texture* defeated_texture = SDL_CreateTextureFromSurface(game_render, defeated_surface);
   SDL_Texture* aircraft_texture = SDL_CreateTextureFromSurface(game_render, aircraft_surface);
+  SDL_Texture* battleship_texture = SDL_CreateTextureFromSurface(game_render, battleship_surface);
 
   printf("Textures made\n");
 
@@ -158,12 +160,16 @@ int main(int argc, char *argv[]) {
   SDL_Rect aircraft;
   aircraft.w = 108;
   aircraft.h = 23;
+  SDL_Rect battleship;
+  aircraft.w = 85;
+  aircraft.h = 22;
   SDL_QueryTexture(surrender_texture, NULL, NULL, &surrender.w, &surrender.h);
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
   SDL_QueryTexture(pvp_button_texture, NULL, NULL, &pvp.w, &pvp.h);
   SDL_QueryTexture(pve_button_texture, NULL, NULL, &pve.w, &pve.h);
   SDL_QueryTexture(quitgame_button_texture, NULL, NULL, &quit.w, &quit.h);
   SDL_QueryTexture(aircraft_texture, NULL, NULL, &aircraft.w, &aircraft.h);
+  SDL_QueryTexture(battleship_texture, NULL, NULL, &battleship.w, &battleship.h);
 
   int battleship_deployed = 0;
   int cruiser_deployed = 0;
@@ -249,9 +255,19 @@ int main(int argc, char *argv[]) {
                     SDL_ShowWindow(game_window);
                     while(aircraft_deployed == 0) {
                       if(event.type == SDL_MOUSEBUTTONDOWN) {
-                        aircraft.x = event.button.x / 32 + 16;
-                        aircraft.y = event.button.y / 26 + 366;
+                        aircraft.x = event.button.x - (event.button.x % 32) - 16;
+                        aircraft.y = event.button.y - (event.button.y % 26) - 366;
                         aircraft_deployed = 1;
+                      }
+                    }
+                    while(battleship_deployed == 0) {
+                      if(event.type == SDL_MOUSEBUTTONDOWN) {
+                        battleship.x = event.button.x - (event.button.x % 32) - 48;
+                        battleship.y = event.button.y - (event.button.y % 26) - 366;
+                        battleship_deployed = 1;
+                        gunboat_deployed = 1;
+                        cruiser_deployed = 1;
+                        destroyer_deployed = 1;
                       }
                     }
                   }
@@ -303,6 +319,9 @@ int main(int argc, char *argv[]) {
     SDL_RenderCopy(game_render, game_texture, NULL, NULL);
     if(aircraft_deployed == 1) {
       SDL_RenderCopy(game_render, aircraft_texture, NULL, &aircraft);
+    }
+    if(battleship_deployed == 1) {
+      SDL_RenderCopy(game_render, battleship_texture, NULL, &battleship);
     }
     if (game_over_defeat == 1) {
       SDL_RenderCopy(game_render, defeated_texture, NULL, &defeat);

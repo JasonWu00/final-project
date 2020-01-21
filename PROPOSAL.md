@@ -70,6 +70,9 @@ and basic SDL. I am expecting to handle networking and formatting,
 while Julian would be handling the menu and basic SDL. The coding of
 the "bot" actions will be split between us two.
 
+**Known Bugs**:
+* 
+
 **Timeline**:
 
 * January 2nd: Proposals due.
