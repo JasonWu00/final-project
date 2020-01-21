@@ -254,8 +254,15 @@ int main(int argc, char *argv[]) {
                   game_over_victory = 0;
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
-                  SDL_HideWindow(window);
-                  SDL_ShowWindow(game_window);
+                  while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed != 4) {//while user placing boats
+                    SDL_HideWindow(window);
+                    SDL_ShowWindow(game_window);
+                    
+                  }
+                  while(game_over_defeat == 0 || game_over_victory == 0) {//while game is going on
+                    SDL_HideWindow(window);
+                    SDL_ShowWindow(game_window);
+                  }
                 }
                 break;
             }
