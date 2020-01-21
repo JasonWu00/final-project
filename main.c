@@ -110,14 +110,16 @@ int main(int argc, char *argv[]) {
   SDL_Surface* quitgame_button_surface = IMG_Load("sprites/quit-game.png");
   SDL_Surface* surrender_surface = IMG_Load("sprites/surrender.png");
   SDL_Surface* defeated_surface = IMG_Load("sprites/defeated.png");
+  SDL_Surface* aircraft_surface = IMG_Load("sprites/aircraft-placed.png");
 
   SDL_Texture* pvp_button_texture = SDL_CreateTextureFromSurface(render, pvp_button_surface);
   SDL_Texture* pve_button_texture = SDL_CreateTextureFromSurface(render, pve_button_surface);
   SDL_Texture* quitgame_button_texture = SDL_CreateTextureFromSurface(render, quitgame_button_surface);
   SDL_Texture* surrender_texture = SDL_CreateTextureFromSurface(game_render, surrender_surface);
   SDL_Texture* defeated_texture = SDL_CreateTextureFromSurface(game_render, defeated_surface);
+  SDL_Texture* aircraft_texture = SDL_CreateTextureFromSurface(game_render, aircraft_surface);
 
-  printf("Texture made\n");
+  printf("Textures made\n");
 
   //SDL_Delay(5000);
   SDL_Rect defeat;
@@ -153,16 +155,21 @@ int main(int argc, char *argv[]) {
   surrender.y = GAME_HEIGHT - 40;
   surrender.w = 40;
   surrender.h = 40;
+  SDL_Rect aircraft;
+  aircraft.w = 108;
+  aircraft.h = 23;
   SDL_QueryTexture(surrender_texture, NULL, NULL, &surrender.w, &surrender.h);
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
   SDL_QueryTexture(pvp_button_texture, NULL, NULL, &pvp.w, &pvp.h);
   SDL_QueryTexture(pve_button_texture, NULL, NULL, &pve.w, &pve.h);
   SDL_QueryTexture(quitgame_button_texture, NULL, NULL, &quit.w, &quit.h);
+  SDL_QueryTexture(aircraft_texture, NULL, NULL, &aircraft.w, &aircraft.h);
 
   int battleship_deployed = 0;
   int cruiser_deployed = 0;
   int destroyer_deployed = 0;
   int gunboat_deployed = 0;
+  int aircraft_deployed = 0;
   int game_over_victory = 0;
   int game_over_defeat = 0;
   int frames_to_close_gamewindow = 0;
@@ -233,11 +240,25 @@ int main(int argc, char *argv[]) {
                   cruiser_deployed = 0;
                   destroyer_deployed = 0;
                   gunboat_deployed = 0;
+                  aircraft_deployed = 0;
                   game_over_victory = 0;
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
-                  SDL_HideWindow(window);
-                  SDL_ShowWindow(game_window);
+                  while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
+                    SDL_HideWindow(window);
+                    SDL_ShowWindow(game_window);
+                    while(aircraft_deployed == 0) {
+                      if(event.type == SDL_MOUSEBUTTONDOWN) {
+                        aircraft.x = event.button.x / 32 + 16;
+                        aircraft.y = event.button.y / 26 + 366;
+                        aircraft_deployed = 1;
+                      }
+                    }
+                  }
+                  while(game_over_defeat == 0 || game_over_victory == 0) {//while game is going on
+                    SDL_HideWindow(window);
+                    SDL_ShowWindow(game_window);
+                  }
                 }
 
               if ( //click on pve button
@@ -251,13 +272,14 @@ int main(int argc, char *argv[]) {
                   cruiser_deployed = 0;
                   destroyer_deployed = 0;
                   gunboat_deployed = 0;
+                  aircraft_deployed = 0;
                   game_over_victory = 0;
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
-                  while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed != 4) {//while user placing boats
+                  while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
-                    
+
                   }
                   while(game_over_defeat == 0 || game_over_victory == 0) {//while game is going on
                     SDL_HideWindow(window);
@@ -279,6 +301,9 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderClear(game_render);
     SDL_RenderCopy(game_render, game_texture, NULL, NULL);
+    if(aircraft_deployed == 1) {
+      SDL_RenderCopy(game_render, aircraft_texture, NULL, &aircraft);
+    }
     if (game_over_defeat == 1) {
       SDL_RenderCopy(game_render, defeated_texture, NULL, &defeat);
     }
