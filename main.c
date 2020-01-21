@@ -336,6 +336,9 @@ int main(int argc, char *argv[]) {
     float delta_y = target_y - y_pos;
     float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
 
+    if (ms_from_click > 180 & buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+      ship_dropped = 1;
+    }
     if (distance < 5) {
       x_vel = y_vel = 0;
     }
@@ -343,10 +346,16 @@ int main(int argc, char *argv[]) {
       x_vel = 0;
       y_vel = 0;
     }*/
-    else if (buttons && SDL_BUTTON(SDL_BUTTON_LEFT) && ms_from_click > 180){
+    else if (ship_dropped){
       x_vel = 0;
       y_vel = 0;
-      battleship_deployed = 1;
+      if (carrier_deployed == 1 && battleship_deployed == 0) {
+        battleship_deployed = 1;
+        ship_dropped = 0;
+      }
+      else if (battleship_deployed == 1 && cruiser_deployed == 0) {
+
+      }
     }
     else {
       x_vel = delta_x * VELOCITY / distance;
