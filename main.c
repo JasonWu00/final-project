@@ -109,15 +109,23 @@ int main(int argc, char *argv[]) {
   SDL_Surface* pve_button_surface = IMG_Load("sprites/pvb.png");
   SDL_Surface* quitgame_button_surface = IMG_Load("sprites/quit-game.png");
   SDL_Surface* surrender_surface = IMG_Load("sprites/surrender.png");
+  SDL_Surface* defeated_surface = IMG_Load("sprites/defeated.png");
 
   SDL_Texture* pvp_button_texture = SDL_CreateTextureFromSurface(render, pvp_button_surface);
   SDL_Texture* pve_button_texture = SDL_CreateTextureFromSurface(render, pve_button_surface);
   SDL_Texture* quitgame_button_texture = SDL_CreateTextureFromSurface(render, quitgame_button_surface);
   SDL_Texture* surrender_texture = SDL_CreateTextureFromSurface(game_render, surrender_surface);
+  SDL_Texture* defeated_texture = SDL_CreateTextureFromSurface(game_render, defeated_surface);
 
   printf("Texture made\n");
 
   //SDL_Delay(5000);
+  SDL_Rect defeat;
+  defeat.x = GAME_WIDTH / 2 - 150;
+  defeat.y = GAME_HEIGHT / 2 - 75;
+  defeat.w = 300;
+  defeat.h = 150;
+  SDL_QueryTexture(defeated_texture, NULL, NULL, &defeat.w, &defeat.h);
   SDL_Rect game;
   game.w = GAME_WIDTH;
   game.h = GAME_HEIGHT;
@@ -155,6 +163,9 @@ int main(int argc, char *argv[]) {
   int cruiser_deployed = 0;
   int destroyer_deployed = 0;
   int gunboat_deployed = 0;
+  int game_over_victory = 0;
+  int game_over_defeat = 0;
+  int frames_to_close_gamewindow = 0;
 
   //setting up server and client
   //int c1d = client1setup();//c1d is fildes for client 1 ("server side")
@@ -171,6 +182,18 @@ int main(int argc, char *argv[]) {
               if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
                 SDL_HideWindow(game_window);
                 SDL_ShowWindow(window);
+              }
+              break;
+            case SDL_MOUSEBUTTONDOWN:
+            if (event.button.button == SDL_BUTTON_LEFT) {
+              if ( //click on surrender flag on lower right
+                event.button.x >= surrender.x &&
+                event.button.y >= surrender.y //&&
+                //event.button.x <= surrender.x + 40 &&
+                //event.button.y <= surrender.y + 40
+                ) {
+                  game_over_defeat = 1;
+                }
               }
               break;
             }
@@ -195,8 +218,7 @@ int main(int argc, char *argv[]) {
                 )
                 {
                   if (event.window.windowID == menu_id) {
-                    SDL_HideWindow(window);
-                    SDL_ShowWindow(game_window);
+                    exit(0);
                   }
                 }
 
@@ -207,7 +229,15 @@ int main(int argc, char *argv[]) {
                 event.button.y <= pvp.y + BUTTON_HEIGHT
                 )
                 {
-                  exit(0); //temporary action, will be updated later
+                  battleship_deployed = 0;
+                  cruiser_deployed = 0;
+                  destroyer_deployed = 0;
+                  gunboat_deployed = 0;
+                  game_over_victory = 0;
+                  game_over_defeat = 0;
+                  frames_to_close_gamewindow = 0;
+                  SDL_HideWindow(window);
+                  SDL_ShowWindow(game_window);
                 }
 
               if ( //click on pve button
@@ -217,7 +247,15 @@ int main(int argc, char *argv[]) {
                 event.button.y <= pve.y + BUTTON_HEIGHT
                 )
                 {
-                  exit(0); //temporary action, will be updated later
+                  battleship_deployed = 0;
+                  cruiser_deployed = 0;
+                  destroyer_deployed = 0;
+                  gunboat_deployed = 0;
+                  game_over_victory = 0;
+                  game_over_defeat = 0;
+                  frames_to_close_gamewindow = 0;
+                  SDL_HideWindow(window);
+                  SDL_ShowWindow(game_window);
                 }
                 break;
             }
@@ -234,9 +272,21 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderClear(game_render);
     SDL_RenderCopy(game_render, game_texture, NULL, NULL);
+    if (game_over_defeat == 1) {
+      SDL_RenderCopy(game_render, defeated_texture, NULL, &defeat);
+    }
     SDL_RenderCopy(game_render, surrender_texture, NULL, &surrender);
     SDL_RenderPresent(game_render);
-
+    if (game_over_defeat == 1 || game_over_victory == 1) {
+      frames_to_close_gamewindow++;
+    }
+    if (frames_to_close_gamewindow == 300) {
+      game_over_defeat = 0;
+      game_over_victory = 0;
+      frames_to_close_gamewindow = 0;
+      SDL_HideWindow(game_window);
+      SDL_ShowWindow(window);
+    }
     SDL_Delay(1000/60);
   }
 

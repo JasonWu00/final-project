@@ -55,3 +55,8 @@ with new one.
 6:00pm January 20 2020
 * Cleaned up SDL poll event cascade. New window opens. Need to fix image quality.
 * Added by Jason Wu.
+
+10:41pm January 20 2020
+* Clicking either PvP or PvE leads to a blank game screen.
+* Surrender button implemented.
+* Added by Jason Wu.
