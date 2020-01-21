@@ -191,7 +191,7 @@ int main(int argc, char *argv[]) {
   int frames_to_close_gamewindow = 0;
   int ship_dropped = 0;
   int gametype = 0; //1 for pvp, 2 for pve, 0 for no game
-  int ms_since_start = 0;
+  int ms_from_click = 0; //milliseconds from when last click occurred
 
   //setting up server and client
   //int c1d = client1setup();//c1d is fildes for client 1 ("server side")
@@ -268,10 +268,10 @@ int main(int argc, char *argv[]) {
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
                   gametype = 1;
+                  ms_from_click = 60;
                   //while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
-                    ms_since_start = 0;
                     /*while(aircraft_deployed == 0) {
                       if(event.type == SDL_MOUSEBUTTONDOWN) {
                         aircraft.x = event.button.x - (event.button.x % 32) - 16;
@@ -291,8 +291,6 @@ int main(int argc, char *argv[]) {
                     }*/
                   //}
                   //if (game_over_defeat == 0 || game_over_victory == 0) {//if started
-                    // SDL_HideWindow(window);
-                    // SDL_ShowWindow(game_window);
                 //  }
                 }
 
@@ -312,6 +310,7 @@ int main(int argc, char *argv[]) {
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
                   gametype = 2;
+                  ms_from_click = 60;
                   /*while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
@@ -320,7 +319,6 @@ int main(int argc, char *argv[]) {
                   //while(game_over_defeat == 0 || game_over_victory == 0) {//while game is going on
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
-                    ms_since_start = 0;
                   //}
                 }
                 break;
@@ -332,24 +330,11 @@ int main(int argc, char *argv[]) {
     int mouse_x, mouse_y;
     int buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-    int target_x = mouse_x - nimitz.w / 2;
-    int target_y = mouse_y - nimitz.h / 2;
+    int target_x = mouse_x;// - nimitz.w / 2;
+    int target_y = mouse_y;// - nimitz.h / 2;
     float delta_x = target_x - x_pos;
     float delta_y = target_y - y_pos;
     float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
-
-    /*SDL_Event dropship;
-    while (SDL_PollEvent(&dropship)) {
-      switch (dropship.type) {
-        case SDL_MOUSEBUTTONDOWN:
-          //if (event.t)
-          ship_dropped = 1;
-          break;
-      }
-    }*/
-    if (ms_since_start > 180 && SDL_BUTTON(SDL_BUTTON_LEFT)) {
-
-    }
 
     if (distance < 5) {
       x_vel = y_vel = 0;
@@ -358,21 +343,26 @@ int main(int argc, char *argv[]) {
       x_vel = 0;
       y_vel = 0;
     }*/
-    else if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)){
+    else if (buttons && SDL_BUTTON(SDL_BUTTON_LEFT) && ms_from_click > 180){
       x_vel = 0;
       y_vel = 0;
+      battleship_deployed = 1;
     }
     else {
       x_vel = delta_x * VELOCITY / distance;
       y_vel = delta_y * VELOCITY / distance;
+      x_pos += x_vel / 60;
+      y_pos += y_vel / 60;
     }
 
-    x_pos += x_vel / 60;
-    y_pos += y_vel / 60;
-
-
-    nimitz.y = (int) y_pos;
-    nimitz.x = (int) x_pos;
+    if (carrier_deployed == 1 && battleship_deployed == 0) {
+      nimitz.y = (int) y_pos;
+      nimitz.x = (int) x_pos;
+    }
+    else if (battleship_deployed == 1 && cruiser_deployed == 0) {
+      arizona.x = (int) x_pos;
+      arizona.y = (int) y_pos;
+    }
 
     SDL_RenderClear(render);
     SDL_RenderCopy(render, texture, NULL, NULL);
@@ -397,16 +387,16 @@ int main(int argc, char *argv[]) {
     if (game_over_defeat == 1 || game_over_victory == 1) {
       frames_to_close_gamewindow++;
     }
-    ms_since_start + 60;
-    if (ms_since_start > 60000) {
-      ms_since_start = 60;
-    }
     if (frames_to_close_gamewindow == 300) {
       game_over_defeat = 0;
       game_over_victory = 0;
       frames_to_close_gamewindow = 0;
       SDL_HideWindow(game_window);
       SDL_ShowWindow(window);
+    }
+    ms_from_click += 60;
+    if (ms_from_click > 60000) {
+      ms_from_click = 60;
     }
     SDL_Delay(1000/60);
   }
