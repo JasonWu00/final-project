@@ -108,10 +108,12 @@ int main(int argc, char *argv[]) {
   SDL_Surface* pvp_button_surface = IMG_Load("sprites/pvp.png");
   SDL_Surface* pve_button_surface = IMG_Load("sprites/pvb.png");
   SDL_Surface* quitgame_button_surface = IMG_Load("sprites/quit-game.png");
+  SDL_Surface* surrender_surface = IMG_Load("sprites/surrender.png");
 
   SDL_Texture* pvp_button_texture = SDL_CreateTextureFromSurface(render, pvp_button_surface);
   SDL_Texture* pve_button_texture = SDL_CreateTextureFromSurface(render, pve_button_surface);
   SDL_Texture* quitgame_button_texture = SDL_CreateTextureFromSurface(render, quitgame_button_surface);
+  SDL_Texture* surrender_texture = SDL_CreateTextureFromSurface(game_render, surrender_surface);
 
   printf("Texture made\n");
 
@@ -138,10 +140,21 @@ int main(int argc, char *argv[]) {
   quit.y = 325;
   quit.w = BUTTON_WIDTH;
   quit.h = BUTTON_HEIGHT;
+  SDL_Rect surrender;
+  surrender.x = GAME_WIDTH - 40;
+  surrender.y = GAME_HEIGHT - 40;
+  surrender.w = 40;
+  surrender.h = 40;
+  SDL_QueryTexture(surrender_texture, NULL, NULL, &surrender.w, &surrender.h);
   SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
   SDL_QueryTexture(pvp_button_texture, NULL, NULL, &pvp.w, &pvp.h);
   SDL_QueryTexture(pve_button_texture, NULL, NULL, &pve.w, &pve.h);
   SDL_QueryTexture(quitgame_button_texture, NULL, NULL, &quit.w, &quit.h);
+
+  int battleship_deployed = 0;
+  int cruiser_deployed = 0;
+  int destroyer_deployed = 0;
+  int gunboat_deployed = 0;
 
   //setting up server and client
   //int c1d = client1setup();//c1d is fildes for client 1 ("server side")
@@ -149,14 +162,15 @@ int main(int argc, char *argv[]) {
 
   while (1) {//loop to prevent window autoclosing
     SDL_Event event;
-    while (SDL_PollEvent(&event)) { //check for events
+      while (SDL_PollEvent(&event)) { //check for events
         if (event.window.windowID == gameplay_id) {
 
           switch(event.type) {
 
             case SDL_WINDOWEVENT:
               if (event.window.event == SDL_WINDOWEVENT_CLOSE) {
-                exit(0);
+                SDL_HideWindow(game_window);
+                SDL_ShowWindow(window);
               }
               break;
             }
@@ -220,6 +234,7 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderClear(game_render);
     SDL_RenderCopy(game_render, game_texture, NULL, NULL);
+    SDL_RenderCopy(game_render, surrender_texture, NULL, &surrender);
     SDL_RenderPresent(game_render);
 
     SDL_Delay(1000/60);
