@@ -191,6 +191,7 @@ int main(int argc, char *argv[]) {
   int frames_to_close_gamewindow = 0;
   int ship_dropped = 0;
   int gametype = 0; //1 for pvp, 2 for pve, 0 for no game
+  int ms_since_start = 0;
 
   //setting up server and client
   //int c1d = client1setup();//c1d is fildes for client 1 ("server side")
@@ -201,9 +202,6 @@ int main(int argc, char *argv[]) {
   float y_vel = 0;
 
   while (1) {//loop to prevent window autoclosing
-    /*if (carrier_deployed = 0) {
-      current = nimitz;
-    }*/
     SDL_Event event;
       while (SDL_PollEvent(&event)) { //check for events
         if (event.window.windowID == gameplay_id) {
@@ -273,6 +271,7 @@ int main(int argc, char *argv[]) {
                   //while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
+                    ms_since_start = 0;
                     /*while(aircraft_deployed == 0) {
                       if(event.type == SDL_MOUSEBUTTONDOWN) {
                         aircraft.x = event.button.x - (event.button.x % 32) - 16;
@@ -292,8 +291,8 @@ int main(int argc, char *argv[]) {
                     }*/
                   //}
                   //if (game_over_defeat == 0 || game_over_victory == 0) {//if started
-                    SDL_HideWindow(window);
-                    SDL_ShowWindow(game_window);
+                    // SDL_HideWindow(window);
+                    // SDL_ShowWindow(game_window);
                 //  }
                 }
 
@@ -321,6 +320,7 @@ int main(int argc, char *argv[]) {
                   //while(game_over_defeat == 0 || game_over_victory == 0) {//while game is going on
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
+                    ms_since_start = 0;
                   //}
                 }
                 break;
@@ -332,8 +332,8 @@ int main(int argc, char *argv[]) {
     int mouse_x, mouse_y;
     int buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
 
-    int target_x = mouse_x - current.w / 2;
-    int target_y = mouse_y - current.h / 2;
+    int target_x = mouse_x - nimitz.w / 2;
+    int target_y = mouse_y - nimitz.h / 2;
     float delta_x = target_x - x_pos;
     float delta_y = target_y - y_pos;
     float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
@@ -347,6 +347,9 @@ int main(int argc, char *argv[]) {
           break;
       }
     }*/
+    if (ms_since_start > 180 && SDL_BUTTON(SDL_BUTTON_LEFT)) {
+
+    }
 
     if (distance < 5) {
       x_vel = y_vel = 0;
@@ -355,12 +358,11 @@ int main(int argc, char *argv[]) {
       x_vel = 0;
       y_vel = 0;
     }*/
-    else if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT))
-    {
-        x_vel = 0;
-        y_vel = 0;
+    else if (buttons & SDL_BUTTON(SDL_BUTTON_LEFT)){
+      x_vel = 0;
+      y_vel = 0;
     }
-    else{
+    else {
       x_vel = delta_x * VELOCITY / distance;
       y_vel = delta_y * VELOCITY / distance;
     }
@@ -394,6 +396,10 @@ int main(int argc, char *argv[]) {
     SDL_RenderPresent(game_render);
     if (game_over_defeat == 1 || game_over_victory == 1) {
       frames_to_close_gamewindow++;
+    }
+    ms_since_start + 60;
+    if (ms_since_start > 60000) {
+      ms_since_start = 60;
     }
     if (frames_to_close_gamewindow == 300) {
       game_over_defeat = 0;

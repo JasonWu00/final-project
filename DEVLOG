@@ -60,3 +60,7 @@ with new one.
 * Clicking either PvP or PvE leads to a blank game screen.
 * Surrender button implemented.
 * Added by Jason Wu.
+
+5:00pm January 21 2020
+* Added preliminary code for placing down ships.
+* Added by Jason Wu.
