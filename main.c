@@ -117,6 +117,9 @@ int main(int argc, char *argv[]) {
   SDL_Surface* defeated_surface = IMG_Load("sprites/defeated.png");
   SDL_Surface* carrier_surface = IMG_Load("sprites/carrier-sprite.png");
   SDL_Surface* battleship_surface = IMG_Load("sprites/battleship-sprite.png");
+  SDL_Surface* submarine_surface = IMG_Load("sprites/submarine-sprite.png");
+  SDL_Surface* gunboat_surface = IMG_Load("sprites/gunboat-sprite.png");
+  SDL_Surface* bomb_surface = IMG_Load("sprites/artillery.png");
 
   SDL_Texture* pvp_button_texture = SDL_CreateTextureFromSurface(render, pvp_button_surface);
   SDL_Texture* pve_button_texture = SDL_CreateTextureFromSurface(render, pve_button_surface);
@@ -125,6 +128,9 @@ int main(int argc, char *argv[]) {
   SDL_Texture* defeated_texture = SDL_CreateTextureFromSurface(game_render, defeated_surface);
   SDL_Texture* carrier_texture = SDL_CreateTextureFromSurface(game_render, carrier_surface);
   SDL_Texture* battleship_texture = SDL_CreateTextureFromSurface(game_render, battleship_surface);
+  SDL_Texture* submarine_texture = SDL_CreateTextureFromSurface(game_render, submarine_surface);
+  SDL_Texture* gunboat_texture = SDL_CreateTextureFromSurface(game_render, gunboat_surface);
+  SDL_Texture* bomb_texture = SDL_CreateTextureFromSurface(game_render, bomb_surface);
 
   printf("Textures made\n");
 
@@ -142,6 +148,23 @@ int main(int argc, char *argv[]) {
   nimitz.w = 160;
   nimitz.h = 40;
   SDL_QueryTexture(carrier_texture, NULL, NULL, &nimitz.w, &nimitz.h);
+  SDL_Rect typhoon;
+  typhoon.x = 0;
+  typhoon.y = 0;
+  typhoon.w = 100;
+  typhoon.h = 30;
+  SDL_QueryTexture(submarine_texture, NULL, NULL, &typhoon.w, &typhoon.h);
+  SDL_Rect pt;
+  pt.x = 0;
+  pt.y = 0;
+  pt.w = 65;
+  pt.h = 30;
+  SDL_QueryTexture(gunboat_texture, NULL, NULL, &pt.w, &pt.h);
+  SDL_Rect bomb;
+  bomb.x = 0;
+  bomb.y = 0;
+  bomb.w = 35;
+  bomb.h = 30;
   SDL_Rect defeat;
   defeat.x = GAME_WIDTH / 2 - 150;
   defeat.y = GAME_HEIGHT / 2 - 75;
@@ -184,8 +207,9 @@ int main(int argc, char *argv[]) {
   int carrier_deployed = 1;
   int battleship_deployed = 0;
   int cruiser_deployed = 0;
-  int destroyer_deployed = 0;
   int gunboat_deployed = 0;
+  int submarine_deployed = 0;
+  int all_ships_deployed = 0;
   int game_over_victory = 0;
   int game_over_defeat = 0;
   int frames_to_close_gamewindow = 0;
@@ -259,17 +283,17 @@ int main(int argc, char *argv[]) {
                 event.button.y <= pvp.y + BUTTON_HEIGHT
                 )
                 {
+                  carrier_deployed = 1;
                   battleship_deployed = 0;
                   cruiser_deployed = 0;
-                  destroyer_deployed = 0;
                   gunboat_deployed = 0;
-                  carrier_deployed = 1;
+                  submarine_deployed = 0;
                   game_over_victory = 0;
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
                   gametype = 1;
-                  ms_from_click = 60;
-                  //while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
+                  ms_from_click = 0;
+                  //while(battleship_deployed + cruiser_deployed + gunboat_deployed + submarine_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
                     /*while(aircraft_deployed == 0) {
@@ -284,9 +308,9 @@ int main(int argc, char *argv[]) {
                         battleship.x = event.button.x - (event.button.x % 32) - 48;
                         battleship.y = event.button.y - (event.button.y % 26) - 366;
                         battleship_deployed = 1;
-                        gunboat_deployed = 1;
+                        submarine_deployed = 1;
                         cruiser_deployed = 1;
-                        destroyer_deployed = 1;
+                        gunboat_deployed = 1;
                       }
                     }*/
                   //}
@@ -301,17 +325,17 @@ int main(int argc, char *argv[]) {
                 event.button.y <= pve.y + BUTTON_HEIGHT
                 )
                 {
+                  carrier_deployed = 1;
                   battleship_deployed = 0;
                   cruiser_deployed = 0;
-                  destroyer_deployed = 0;
                   gunboat_deployed = 0;
-                  carrier_deployed = 1;
+                  submarine_deployed = 0;
                   game_over_victory = 0;
                   game_over_defeat = 0;
                   frames_to_close_gamewindow = 0;
                   gametype = 2;
-                  ms_from_click = 60;
-                  /*while(battleship_deployed + cruiser_deployed + destroyer_deployed + gunboat_deployed + aircraft_deployed != 5) {//while user placing boats
+                  ms_from_click = 0;
+                  /*while(battleship_deployed + cruiser_deployed + gunboat_deployed + submarine_deployed + aircraft_deployed != 5) {//while user placing boats
                     SDL_HideWindow(window);
                     SDL_ShowWindow(game_window);
 
@@ -336,8 +360,9 @@ int main(int argc, char *argv[]) {
     float delta_y = target_y - y_pos;
     float distance = sqrt(delta_x * delta_x + delta_y * delta_y);
 
-    if (ms_from_click > 180 & buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+    if (ms_from_click > 300 & buttons & SDL_BUTTON(SDL_BUTTON_LEFT)) {
       ship_dropped = 1;
+      ms_from_click = 0;
     }
     if (distance < 5) {
       x_vel = y_vel = 0;
@@ -346,17 +371,34 @@ int main(int argc, char *argv[]) {
       x_vel = 0;
       y_vel = 0;
     }*/
-    else if (ship_dropped){
+    else if (all_ships_deployed) {
+      x_vel = delta_x * VELOCITY / distance;
+      y_vel = delta_y * VELOCITY / distance;
+      x_pos += x_vel / 60;
+      y_pos += y_vel / 60;
+    }
+
+    else if (ship_dropped) {
       x_vel = 0;
       y_vel = 0;
       if (carrier_deployed == 1 && battleship_deployed == 0) {
         battleship_deployed = 1;
         ship_dropped = 0;
       }
-      else if (battleship_deployed == 1 && cruiser_deployed == 0) {
-
+      else if (battleship_deployed == 1 && submarine_deployed == 0) {
+        submarine_deployed = 1;
+        ship_dropped = 0;
+      }
+      else if (submarine_deployed == 1 && gunboat_deployed == 0) {
+        gunboat_deployed = 1;
+        ship_dropped = 0;
+      }
+      else if (gunboat_deployed == 1 && all_ships_deployed == 0) {
+        all_ships_deployed = 1;
+        ship_dropped = 0;
       }
     }
+    
     else {
       x_vel = delta_x * VELOCITY / distance;
       y_vel = delta_y * VELOCITY / distance;
@@ -368,10 +410,23 @@ int main(int argc, char *argv[]) {
       nimitz.y = (int) y_pos;
       nimitz.x = (int) x_pos;
     }
-    else if (battleship_deployed == 1 && cruiser_deployed == 0) {
+    else if (battleship_deployed == 1 && submarine_deployed == 0) {
       arizona.x = (int) x_pos;
       arizona.y = (int) y_pos;
     }
+    else if (submarine_deployed == 1 && gunboat_deployed == 0) {
+      typhoon.x = (int) x_pos;
+      typhoon.y = (int) y_pos;
+    }
+    else if (gunboat_deployed == 1 && all_ships_deployed == 0) {
+      pt.x = (int) x_pos;
+      pt.y = (int) y_pos;
+    }
+    else if (all_ships_deployed == 1) {
+      bomb.x = (int) x_pos;
+      bomb.y = (int) y_pos;
+    }
+
 
     SDL_RenderClear(render);
     SDL_RenderCopy(render, texture, NULL, NULL);
@@ -382,11 +437,20 @@ int main(int argc, char *argv[]) {
 
     SDL_RenderClear(game_render);
     SDL_RenderCopy(game_render, game_texture, NULL, NULL);
-    if(carrier_deployed == 1) {
+    if (carrier_deployed == 1) {
       SDL_RenderCopy(game_render, carrier_texture, NULL, &nimitz);
     }
-    if(battleship_deployed == 1) {
+    if (battleship_deployed == 1) {
       SDL_RenderCopy(game_render, battleship_texture, NULL, &arizona);
+    }
+    if (submarine_deployed == 1) {
+      SDL_RenderCopy(game_render, submarine_texture, NULL, &typhoon);
+    }
+    if (gunboat_deployed == 1) {
+      SDL_RenderCopy(game_render, gunboat_texture, NULL, &pt);
+    }
+    if (all_ships_deployed == 1) {
+      SDL_RenderCopy(game_render, bomb_texture, NULL, &bomb);
     }
     if (game_over_defeat == 1) {
       SDL_RenderCopy(game_render, defeated_texture, NULL, &defeat);
